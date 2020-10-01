@@ -29,7 +29,7 @@ export default class CreateCourse extends Component {
       .post("http://localhost:5000/courses/add", course)
       .then((res) => console.log(res.data));
 
-    window.location = "/";
+    window.location = "/create";
   }
 
   render() {

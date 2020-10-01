@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Pagination from "./common/pagination";
 
 const Course = (props) => (
   <tr>
@@ -8,7 +9,7 @@ const Course = (props) => (
     <td>
       <Link to={"/edit/" + props.course._id}>Edit</Link> |{" "}
       <a
-        href="#"
+        href="/#"
         onClick={() => {
           props.deleteCourse(props.course._id);
         }}
@@ -20,9 +21,13 @@ const Course = (props) => (
 );
 
 export default class CoursesList extends Component {
+  state = {
+    pageSize: 4,
+  };
+
   constructor(props) {
     super(props);
-
+    this.PageChange = this.PageChange.bind(this);
     this.deleteCourse = this.deleteCourse.bind(this);
     this.state = { courses: [] };
   }
@@ -59,6 +64,10 @@ export default class CoursesList extends Component {
     });
   }
 
+  PageChange = (page) => {
+    console.log(page);
+  };
+
   render() {
     return (
       <div>
@@ -66,6 +75,11 @@ export default class CoursesList extends Component {
         <table className="table">
           <tbody>{this.CourseList()}</tbody>
         </table>
+        <Pagination
+          itemsCount={this.state.courses.length}
+          pageSize={this.state.pageSize}
+          onPageChange={this.PageChange}
+        />
       </div>
     );
   }
