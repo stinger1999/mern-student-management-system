@@ -27,7 +27,11 @@ export default class CoursesList extends Component {
     super(props);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.deleteCourse = this.deleteCourse.bind(this);
-    this.state = { courses: [], pageSize: 4, currentPage: 1 };
+    this.state = {
+      courses: [],
+      pageSize: 4,
+      currentPage: 1,
+    };
   }
 
   componentDidMount() {
@@ -68,6 +72,15 @@ export default class CoursesList extends Component {
 
   render() {
     const { pageSize, currentPage } = this.state;
+
+    if (this.state.courses.length === 0)
+      return (
+        <p>
+          There are no courses avaliable at the moment. Sorry for the
+          inconvience.
+        </p>
+      );
+
     return (
       <div>
         <h3>Avaliable Courses</h3>
