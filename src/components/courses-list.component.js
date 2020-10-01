@@ -21,15 +21,13 @@ const Course = (props) => (
 );
 
 export default class CoursesList extends Component {
-  state = {
-    pageSize: 4,
-  };
+  //state = { courses: [], pageSize: 4, currentPage: 1 };
 
   constructor(props) {
     super(props);
-    this.PageChange = this.PageChange.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
     this.deleteCourse = this.deleteCourse.bind(this);
-    this.state = { courses: [] };
+    this.state = { courses: [], pageSize: 4, currentPage: 1 };
   }
 
   componentDidMount() {
@@ -64,11 +62,12 @@ export default class CoursesList extends Component {
     });
   }
 
-  PageChange = (page) => {
-    console.log(page);
-  };
+  handlePageChange(page) {
+    this.setState({ currentPage: page });
+  }
 
   render() {
+    const { pageSize, currentPage } = this.state;
     return (
       <div>
         <h3>Avaliable Courses</h3>
@@ -77,8 +76,9 @@ export default class CoursesList extends Component {
         </table>
         <Pagination
           itemsCount={this.state.courses.length}
-          pageSize={this.state.pageSize}
-          onPageChange={this.PageChange}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={this.handlePageChange}
         />
       </div>
     );
