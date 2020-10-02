@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import _ from "lodash";
 import Pagination from "./common/pagination";
 
 const Course = (props) => (
@@ -25,11 +26,12 @@ export default class CoursesList extends Component {
 
   constructor(props) {
     super(props);
+    this.paginate = this.paginate.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.deleteCourse = this.deleteCourse.bind(this);
     this.state = {
       courses: [],
-      pageSize: 4,
+      pageSize: 9,
       currentPage: 1,
     };
   }
@@ -54,8 +56,15 @@ export default class CoursesList extends Component {
     });
   }
 
+  paginate(items, pageNumber, pageSize) {
+    const startIndex = (pageNumber - 1) * pageSize;
+    return _(items).slice(startIndex).take(pageSize).value();
+  }
+
   CourseList() {
-    return this.state.courses.map((currentcourse) => {
+    const { pageSize, currentPage, courses: allCourses } = this.state;
+    const courses = this.paginate(allCourses, currentPage, pageSize);
+    return courses.map((currentcourse) => {
       return (
         <Course
           course={currentcourse}
@@ -76,14 +85,19 @@ export default class CoursesList extends Component {
     if (this.state.courses.length === 0)
       return (
         <p>
-          There are no courses avaliable at the moment. Sorry for the
-          inconvience.
+          <i>
+            There are no courses avaliable at the moment. Sorry for the
+            inconvience.
+          </i>
         </p>
       );
 
     return (
       <div>
         <h3>Avaliable Courses</h3>
+        <p>
+          <i>Number of avaliable courses: {this.state.courses.length}</i>
+        </p>
         <table className="table">
           <tbody>{this.CourseList()}</tbody>
         </table>
